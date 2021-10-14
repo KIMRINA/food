@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="egovframework.example.sample.mapper.PBoardMapper">
+
+	<!-- 게시판 글 작성 -->
+	<insert id="pBoardInsert">
+		INSERT INTO PICBOARD(pboard_no, pboard_subject, pboard_content, 
+						  pboard_date, pboard_category, board_no)
+		VALUES(pboard_seq.NEXTVAL, #{pboard_subject}, #{pboard_content}, SYSDATE, #{pboard_category}, #{board_no})
+		
+	</insert>
+	
+	<select id="pBoardList" resultType="pBoardVO">
+		<![CDATA[
+		SELECT pboard_no, pboard_subject, pboard_content, pboard_date, pboard_category, pcate_name
+		FROM PICBOARD b, picCategory c
+		WHERE b.pboard_category = c.pcate_rname 
+		]]>
+		<if test="category != null and category != ''">
+			and b.pboard_category = #{category}
+		</if>
+		<![CDATA[
+		ORDER BY pboard_no DESC
+		]]>
+	</select>
+	
+	<select id="pBoardListSearchCount" resultType="int">
+		<![CDATA[
+		select count(pboard_no)
+		from picBoard
+		where pboard_no > 0
+		]]>
+		<include refid="search"></include>
+	</select>
+	
+	<sql id="search">
+		<if test="searchType != null">
+			<if test="searchType == 't'.toString()">
+				and board_title like CONCAT('%', #{keyword}, '%')
+			</if>
+			<if test="searchType == 'c'.toString()">
+				and board_content like CONCAT('%', #{keyword}, '%')
+			</if>
+			<if test="searchType == 'w'.toString()">
+				and board_name like CONCAT('%', #{keyword}, '%')
+			</if>
+			<if test="searchType == 'tcw'.toString()">
+				and 
+				( board_title like CONCAT('%', #{keyword}, '%') 
+				OR board_content like CONCAT('%', #{keyword}, '%')
+				OR board_name like CONCAT('%', #{keyword}, '%')
+				)
+			</if>
+		</if>
+	</sql>
+	
+	<select id="pBoardCateList" resultType="pBoardVO">
+		SELECT pcate_rname, pcate_name
+		FROM picCategory
+	</select>
+	
+	<select id="pBoardListOneRead" resultType="pBoardVO">
+		SELECT pboard_no, pboard_subject, pboard_content, pboard_date, pboard_category, pcate_name
+		FROM PICBOARD b, picCategory c
+		WHERE b.pboard_category = c.pcate_rname 
+		AND pboard_no = #{pboard_no}
+		ORDER BY pboard_no DESC
+	</select>
+	
+
+</mapper>
