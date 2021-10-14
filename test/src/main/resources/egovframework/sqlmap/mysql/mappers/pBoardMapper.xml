@@ -16,6 +16,7 @@
 		SELECT pboard_no, pboard_subject, pboard_content, pboard_date, pboard_category, pcate_name
 		FROM PICBOARD b, picCategory c
 		WHERE b.pboard_category = c.pcate_rname 
+		and b.pboard_no = #{pboard_no}
 		]]>
 		<if test="category != null and category != ''">
 			and b.pboard_category = #{category}

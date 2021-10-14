@@ -1,9 +1,12 @@
 package egovframework.example.sample.web;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
@@ -86,10 +89,28 @@ public class BoardController {
 	public String pBoardList(HttpServletRequest req, PBoardVO vo, Model model) throws Exception {
 		LOGGER.info("** get list **");
 		
+//		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		
 		String category = req.getParameter("category");
 		vo.setCategory(category);
 		
+//		Random rand = new Random();
+//		vo.setPboard_no(rand.nextInt(10));	// 1~100
+//		System.out.println(rand.nextInt(10));
+		
 		List<PBoardVO> list = boardService.pBoardList(vo);
+		
+		List<Integer> data = new ArrayList<Integer>();
+		
+		for(int i=0; i<list.size(); i++) {
+			data.add(list.get(i).getPboard_no());
+		}
+		
+		// shuffle 이용
+        Collections.shuffle(data);
+        Integer get_Card2 = data.get(0);
+        data.remove(0);
+        System.out.println(get_Card2);
 		
 		model.addAttribute("list", list);
 		
