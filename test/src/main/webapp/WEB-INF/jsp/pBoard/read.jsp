@@ -16,7 +16,7 @@
 
 <body>
 	<section id="container">
-	<form name="readForm" role="form" method="post">
+	<form name="readForm" role="form" method="post" action="">
 		<table>
 			<tbody>
 				<tr>
@@ -63,14 +63,33 @@
 				</tr>	 --%>
 			</tbody>			
 		</table>
+		
+		<div>
+			<button type="button" class="update_btn" onclick="updateGO()">수정</button>
+			<button type="button" class="delete_btn" onclick="deleteGO()">삭제</button>
+			<button type="button" onclick="listGO()">리스트</button>
+		</div>
 	</form>
 	</section>
 
-		<button class="update_btn">수정</button>
-		<form name="deleteForm" role="form" method="post">
-			<button class="delete_btn">삭제</button>
-		</form>
-		
+<script>
+	function updateGO() {
+		location.href = "${pageContext.request.contextPath}/pBoard/pBoardUpdateView.do?pboard_no="+$("#pboard_no").val();
+	}
+	function listGO() {
+		location.href = "${pageContext.request.contextPath}/pBoard/pBoardList.do";
+	}
+	function deleteGO() {
+		if (confirm("정말 삭제하시겠습니까??") == true){    //확인
+			var frm = document.readForm;
+			frm.action = "${pageContext.request.contextPath}/pBoard/pBoardDelete.do";
+			frm.submit();
+			//location.href = "${pageContext.request.contextPath}/pBoard/pBoardDelete.do?pboard_no="+$("#pboard_no").val();
+		}else{   //취소
+		    return;
+		}
+	}
+</script>	
 		
 </body>
 </html>

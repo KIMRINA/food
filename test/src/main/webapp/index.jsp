@@ -15,5 +15,5 @@
 	}
 </script>
 <body>
-	<button onclick="listGo()">list</button>
+	<span>오늘 뭐 먹지 ? : </span><button onclick="listGo()">click</button>
 </body>

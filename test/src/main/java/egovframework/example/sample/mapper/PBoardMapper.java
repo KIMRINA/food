@@ -14,6 +14,10 @@ public class PBoardMapper extends EgovAbstractMapper {
 		insert("pBoardInsert", vo);
 	}
 	
+	public List<PBoardVO> pBoardListAll(PBoardVO vo) throws Exception {
+		return selectList("pBoardListAll", vo);
+	}
+	
 	public List<PBoardVO> pBoardList(PBoardVO vo) throws Exception {
 		return selectList("pBoardList", vo);
 	}
@@ -24,6 +28,22 @@ public class PBoardMapper extends EgovAbstractMapper {
 	
 	public PBoardVO pBoardListOneRead(int pBoard_no) throws Exception {
 		return selectOne("pBoardListOneRead", pBoard_no);
+	}
+	
+	public void pBoardUpdate(PBoardVO vo) throws Exception {
+		update("pBoardUpdate", vo);
+	}
+	
+	public void pBoardDelete(int pBoard_no) throws Exception {
+		delete("pBoardDelete", pBoard_no);
+	}
+	
+	public List<PBoardVO> pBoardListAllPaging(PBoardVO vo) throws Exception {
+		return selectList("pBoardListAllPaging", vo);
+	}
+	
+	public int pBoardListAllPagingCount(PBoardVO vo) throws Exception {
+		return selectOne("pBoardListAllPagingCount", vo);
 	}
 	
 

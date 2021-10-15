@@ -2,6 +2,8 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="ui"     uri="http://egovframework.gov/ctl/ui"%>
+<%@ taglib prefix="form"   uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -38,6 +40,7 @@ a {
 		<%-- <%@include file="nav.jsp" %> --%>
 	</div>
 	
+<%-- <form:form commandName="PBoardVO" id="searchForm" name="searchForm" method="post"> --%>
 <form name="searchForm" id="searchForm" method="get" action="">
 	<div class="search_box">
 		<div class="search">
@@ -62,7 +65,7 @@ a {
 			</ul>
 		</div>
 	</div>
-</form>
+
 	
 	<div class="tbl">
 		<table>
@@ -92,14 +95,20 @@ a {
 			
 		</table>
 	</div>
+	<div id="paging">
+  		<ui:pagination paginationInfo = "${paginationInfo}" type="image" jsFunction="fn_egov_link_page" />
+  		<%-- <form:hidden path="pageIndex" /> --%>
+  	</div>
+  	<input type="hidden" id="pageNo" name="pageNo" value="${cNo}"/>
 	
 	<div>
 	  	<button type="button" onclick="writeGO()">글쓰기</button>
 	  	<button type="button" onclick="excelGO()">엑셀다운로드</button>
-	  	<button type="button" onclick="listAllGO()">전체리스트</button>
+	  	<button type="button" onclick="listRandomGO()">랜덤리스트</button>
 	</div>
   	
-
+</form>
+<%-- </form:form> --%>
 
 <%-- <div id="paging">
 <nav aria-label="Page navigation example">
@@ -161,15 +170,25 @@ a {
 
 
 <script>
+
+	/* pagination 페이지 링크 function */
+	function fn_egov_link_page(pageNo){
+		document.searchForm.pageNo.value = pageNo;
+		document.searchForm.action = "<c:url value='/pBoard/pBoardListAll.do?category="+$("#category").val()+"'/>";
+	   	document.searchForm.submit();
+	   	//location.href = "${pageContext.request.contextPath}/pBoard/pBoardListAll.do?pageNo="+pageNo;
+	}
+	
 	function writeGO() {
 		location.href = "${pageContext.request.contextPath}/pBoard/pBoardInsertView.do";
 	}
 	function excelGO() {
 		location.href = "${pageContext.request.contextPath}/pBoard/pBoardListExcel.do";
 	}
-	function listAllGO() {
-		location.href = "${pageContext.request.contextPath}/pBoard/pBoardListAll.do?pageNo=1";
+	function listRandomGO() {
+		location.href = "${pageContext.request.contextPath}/pBoard/pBoardList.do";
 	}
+	
 	
 	function onSearch(){
 		var frm = document.searchForm;
@@ -181,7 +200,7 @@ a {
 // 			return;
 // 		}
 
-		frm.action = "${pageContext.request.contextPath}/pBoard/pBoardList.do";
+		frm.action = "${pageContext.request.contextPath}/pBoard/pBoardListAll.do?pageNo="+$("#cNo").val();
 		frm.submit();
 	}
 	

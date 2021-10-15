@@ -44,4 +44,29 @@ private static final Logger LOGGER = LoggerFactory.getLogger(PBoardServiceImpl.c
 		return boardMapper.pBoardListOneRead(pBoard_no);
 	}
 
+	@Override
+	public List<PBoardVO> pBoardListAll(PBoardVO vo) throws Exception {
+		return boardMapper.pBoardListAll(vo);
+	}
+
+	@Override
+	public void pBoardUpdate(PBoardVO vo) throws Exception {
+		boardMapper.pBoardUpdate(vo);
+	}
+
+	@Override
+	public void pBoardDelete(int pBoard_no) throws Exception {
+		boardMapper.pBoardDelete(pBoard_no);
+	}
+
+	@Override
+	public List<PBoardVO> pBoardListAllPaging(PBoardVO vo) throws Exception {
+		return boardMapper.pBoardListAllPaging(vo);
+	}
+
+	@Override
+	public int pBoardListAllPagingCount(PBoardVO vo) throws Exception {
+		return boardMapper.pBoardListAllPagingCount(vo);
+	}
+
 }

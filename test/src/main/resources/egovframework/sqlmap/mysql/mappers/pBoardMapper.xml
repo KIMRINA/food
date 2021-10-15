@@ -11,6 +11,20 @@
 		
 	</insert>
 	
+	<select id="pBoardListAll" resultType="pBoardVO">
+		<![CDATA[
+		SELECT pboard_no, pboard_subject, pboard_content, pboard_date, pboard_category, pcate_name
+		FROM PICBOARD b, picCategory c
+		WHERE b.pboard_category = c.pcate_rname 
+		]]>
+		<if test="category != null and category != ''">
+			and b.pboard_category = #{category}
+		</if>
+		<![CDATA[
+		ORDER BY pboard_no DESC
+		]]>
+	</select>
+	
 	<select id="pBoardList" resultType="pBoardVO">
 		<![CDATA[
 		SELECT pboard_no, pboard_subject, pboard_content, pboard_date, pboard_category, pcate_name
@@ -56,6 +70,33 @@
 		</if>
 	</sql>
 	
+	<select id="pBoardListAllPaging" resultType="pBoardVO">
+		<![CDATA[
+		SELECT * FROM ( SELECT ROW_NUMBER() OVER(ORDER BY pboard_no DESC) AS DATA_CNT, A.* FROM (
+			SELECT pboard_no, pboard_subject, pboard_content, pboard_date, pboard_category, pcate_name
+			FROM PICBOARD b, picCategory c
+			WHERE b.pboard_category = c.pcate_rname 
+		]]>
+		<if test="category != null and category != ''">
+			and b.pboard_category = #{category}
+		</if>
+		<![CDATA[
+			ORDER BY pboard_no DESC
+		) A ) WHERE DATA_CNT BETWEEN #{firstIndex} AND #{lastIndex} ORDER BY DATA_CNT
+		]]>
+	</select>
+	
+	<select id="pBoardListAllPagingCount" resultType="int">
+		<![CDATA[
+			SELECT count(pboard_no)
+			FROM PICBOARD
+			WHERE pboard_no > 0
+		]]>
+		<if test="category != null and category != ''">
+			and pboard_category = #{category}
+		</if>
+	</select>
+	
 	<select id="pBoardCateList" resultType="pBoardVO">
 		SELECT pcate_rname, pcate_name
 		FROM picCategory
@@ -68,6 +109,19 @@
 		AND pboard_no = #{pboard_no}
 		ORDER BY pboard_no DESC
 	</select>
+	
+	<update id="pBoardUpdate" parameterType="pBoardVO">
+		UPDATE PICBOARD
+		   SET pboard_subject    =   #{pboard_subject},
+		   	   pboard_content  =   #{pboard_content},
+		   	   pboard_category =   #{pboard_category}
+		 WHERE pboard_no = #{pboard_no}
+	</update>
+	
+	<delete id="pBoardDelete">
+		delete from PICBOARD
+		where pboard_no = #{pboard_no}
+	</delete>
 	
 
 </mapper>
